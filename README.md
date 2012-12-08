@@ -16,3 +16,8 @@ Downloading multiple chapters
 =============================
 
 python mangareader.py [manganame] [starting chapter] [ending chapter]
+
+Configuration File
+==================
+manga.conf contains information about the base directory
+of all the manga Downloads

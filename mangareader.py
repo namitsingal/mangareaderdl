@@ -5,7 +5,7 @@ import os
 import sys
 import urllib2
 
-
+BASE_DIR=''
 names=''
 
 def checkend(link1,link2):  
@@ -66,13 +66,13 @@ def findurl(name,chapter,x1):
         
 def dlchapter(url,chapter,name,x1,p):
     global names
-    k='/home/namit/'+str(names)
+    k=BASE_DIR+str(names)
     if(os.path.isdir(k)==False):
         os.mkdir(k)
     z=k+'/'+str(chapter)
     if(os.path.isdir(z)==False):
         os.mkdir(z)
-        
+    #print z
     x='http://www.mangareader.net'+url
     i=1
     while(True):
@@ -103,7 +103,7 @@ def downloader(urls,i,chapter,name,x,p):
         kk=str(s)
         #print kk
         global names
-        loc='/home/namit/'+str(names)+'/'+str(chapter)+'/'+str(i)+'.jpg'
+        loc=BASE_DIR+str(names)+'/'+str(chapter)+'/'+str(i)+'.jpg'
         reqs = urllib2.Request(img)
         output = open(loc,'wb')
         output.write(urllib2.urlopen(reqs).read())
@@ -120,6 +120,35 @@ def main():
     try:
         global names
         name=''
+        if(os.path.isfile(os.getcwd()+'/manga.conf')==False):
+            #print os.getcwd()+'/manga.conf'
+            var = raw_input("Enter Source Directory(Complete Path): ")
+            if(os.path.isdir(var)==False):
+                print "Entered Directory Does not exist aborting"
+                sys.exit()
+            else:
+                k=open(os.getcwd()+'/manga.conf','w+')
+                k.write('path='+var)
+                k.close()
+                global BASE_DIR
+                BASE_DIR=var + '/'
+        else:
+            k=open('manga.conf').read()
+            fil=k[k.index('path=')+5:-2]
+            print fil
+            if(os.path.isdir(fil)==False):
+                os.unlink('manga.conf')
+                var = raw_input("Enter Source Directory(Complete Path): ")
+                if(os.path.isdir(var)==False):
+                    print "Entered Directory Does not exist aborting"
+                    sys.exit()    
+            else:
+                global BASE_DIR
+                BASE_DIR=fil + '/'
+
+
+
+
         x=re.compile('<a href="(.*)"><img id')
         k=int(sys.argv[3])
         l=int(sys.argv[2])
